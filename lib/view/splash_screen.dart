@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 
 import '../utils/route.dart';
+import 'auth_screens/login_email_screen.dart';
 
-class SplashScreen extends ConsumerWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushNamed(context, Routes.loginScreen);
+  Widget build(BuildContext context) {
+    Future.delayed(const Duration(seconds: 4), () {
+      Get.to(const LoginEmailScreen());
     });
 
     return Material(
