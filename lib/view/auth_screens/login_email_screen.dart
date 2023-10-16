@@ -2,6 +2,7 @@ import 'package:fashol_purchase_tracking_flutter/view/auth_screens/login_screen_
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:mysql1/mysql1.dart';
 
 import '../../common/login_style_button.dart';
 
@@ -90,7 +91,10 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
                         height: 24,
                       ),
                       LoginStyleButton(
-                        runFunction: () {},
+                        runFunction: () async {
+                          var x = fetchUser();
+                          print(x);
+                        },
                         textData: "Login",
                       ),
                     ],
@@ -138,6 +142,21 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
       ),
     );
   }
+}
+
+fetchUser() async {
+  print("hi");
+  var settings = ConnectionSettings(
+      host: '192.168.0.102',
+      port: 3306,
+      user: 'me',
+      password: '',
+      db: 'fashol_erp');
+  var conn = await MySqlConnection.connect(settings);
+
+  // var result = conn.query("select * from user where id = 1");
+  //
+  // return result;
 }
 
 // email text input box

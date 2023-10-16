@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../view/auth_screens/login_email_screen.dart';
+
 class LoginStyleButton extends StatefulWidget {
   final Function runFunction;
   final String textData;
@@ -17,7 +19,9 @@ class _LoginStyleButtonState extends State<LoginStyleButton> {
       children: [
         Expanded(
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              // widget.runFunction;
+              fetchUser();
               // Add your login logic here
             },
             style: ElevatedButton.styleFrom(
