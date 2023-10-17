@@ -13,6 +13,9 @@ class LoginPhoneScreen extends StatefulWidget {
 }
 
 class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -75,12 +78,13 @@ class _LoginPhoneScreenState extends State<LoginPhoneScreen> {
                   right: 0,
                   child: Column(
                     children: [
-                      const TextInputBoxWithLogo(
+                      TextInputBoxWithLogo(
                         hintText: 'Enter Your Mobile Number',
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.phone,
                           color: Colors.black45,
                         ),
+                        emailController: emailController,
                       ),
                       const SizedBox(
                         height: 16,

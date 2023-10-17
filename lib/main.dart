@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
+import 'core/view_model/user_view_model.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -31,7 +33,7 @@ class MyApp extends ConsumerWidget {
         Routes.loginScreen: (context) => const LoginEmailScreen(),
       },
       initialBinding: BindingsBuilder(() {
-        // Get.lazyPut(() => );
+        Get.lazyPut(() => UserViewModel());
       }),
     );
   }

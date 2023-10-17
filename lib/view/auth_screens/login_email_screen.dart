@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:mysql1/mysql1.dart';
 
 import '../../common/login_style_button.dart';
+import '../../core/view_model/user_view_model.dart';
 
 class LoginEmailScreen extends StatefulWidget {
   const LoginEmailScreen({super.key});
@@ -14,12 +15,17 @@ class LoginEmailScreen extends StatefulWidget {
 }
 
 class _LoginEmailScreenState extends State<LoginEmailScreen> {
+  final UserViewModel viewModel = Get.find();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 32),
           child: SingleChildScrollView(
             child: Stack(
               children: [
@@ -35,13 +41,13 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
 
                 //greetings text and header START
 
-                const Positioned(
+                Positioned(
                   top: 128,
                   left: 0,
                   right: 0,
                   child: Column(
                     children: [
-                      Text(
+                      const Text(
                         "Welcome Back !",
                         style: TextStyle(
                           fontSize: 16,
@@ -50,12 +56,12 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
                           color: Colors.black45,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 24,
                       ),
                       Text(
-                        "Login",
-                        style: TextStyle(
+                        "Login ${viewModel.user.value.name.obs}",
+                        style: const TextStyle(
                           fontSize: 32,
                           fontFamily: "Lato",
                           fontWeight: FontWeight.w300,
@@ -76,26 +82,52 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
                   right: 0,
                   child: Column(
                     children: [
-                      const TextInputBoxWithLogo(
+                      TextInputBoxWithLogo(
                         hintText: 'Enter your email here',
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.email_outlined,
                           color: Colors.black45,
                         ),
+                        emailController: emailController,
                       ),
                       const SizedBox(
                         height: 16,
                       ),
-                      const TextInputBoxWithLogoPassword(),
+                      TextInputBoxWithLogoPassword(
+                        passwordController: passwordController,
+                      ),
                       const SizedBox(
                         height: 24,
                       ),
-                      LoginStyleButton(
-                        runFunction: () async {
-                          var x = fetchUser();
-                          print(x);
-                        },
-                        textData: "Login",
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                final username = emailController.text;
+                                final password = passwordController.text;
+                                viewModel.login(username, password);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Colors.green, // Background color
+                                padding: const EdgeInsets.all(
+                                    16.0), // Button padding
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      8.0), // Button border radius
+                                ),
+                              ),
+                              child: const Text(
+                                "Login _",
+                                style: TextStyle(
+                                  color: Colors.white, // Text color
+                                  fontSize: 18.0, // Text font size
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -144,27 +176,16 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
   }
 }
 
-fetchUser() async {
-  print("hi");
-  var settings = ConnectionSettings(
-      host: '192.168.0.102',
-      port: 3306,
-      user: 'me',
-      password: '',
-      db: 'fashol_erp');
-  var conn = await MySqlConnection.connect(settings);
-
-  // var result = conn.query("select * from user where id = 1");
-  //
-  // return result;
-}
-
 // email text input box
 class TextInputBoxWithLogo extends StatelessWidget {
   final String hintText;
   final Icon icon;
+  final TextEditingController emailController;
   const TextInputBoxWithLogo(
-      {super.key, required this.hintText, required this.icon});
+      {super.key,
+      required this.hintText,
+      required this.icon,
+      required this.emailController});
 
   @override
   Widget build(BuildContext context) {
@@ -184,6 +205,7 @@ class TextInputBoxWithLogo extends StatelessWidget {
           ),
           Expanded(
             child: TextField(
+              controller: emailController,
               decoration: InputDecoration(
                 hintText: hintText, // Replace with your desired hint text
                 border: InputBorder.none,
@@ -196,9 +218,12 @@ class TextInputBoxWithLogo extends StatelessWidget {
   }
 }
 
-// phone text input box
+// password text input box
 class TextInputBoxWithLogoPassword extends StatefulWidget {
-  const TextInputBoxWithLogoPassword({super.key});
+  final TextEditingController passwordController;
+
+  const TextInputBoxWithLogoPassword(
+      {super.key, required this.passwordController});
 
   @override
   TextInputBoxWithLogoPasswordState createState() =>
@@ -236,6 +261,7 @@ class TextInputBoxWithLogoPasswordState
           ),
           Expanded(
             child: TextField(
+              controller: widget.passwordController,
               obscureText: _obscureText,
               decoration: const InputDecoration(
                 hintText: 'Enter your password here',
