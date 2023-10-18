@@ -15,7 +15,7 @@ class LoginEmailScreen extends StatefulWidget {
 }
 
 class _LoginEmailScreenState extends State<LoginEmailScreen> {
-  final UserViewModel viewModel = Get.find();
+  final UserViewModel userViewModel = Get.find();
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -23,9 +23,9 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Scaffold(
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+      child: Scaffold(body: Obx(() {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
           child: SingleChildScrollView(
             child: Stack(
               children: [
@@ -47,9 +47,9 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
                   right: 0,
                   child: Column(
                     children: [
-                      const Text(
-                        "Welcome Back !",
-                        style: TextStyle(
+                      Text(
+                        "Welcome Back ${userViewModel.users.value.name} !",
+                        style: const TextStyle(
                           fontSize: 16,
                           fontFamily: "Lato",
                           fontWeight: FontWeight.w300,
@@ -59,9 +59,9 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
                       const SizedBox(
                         height: 24,
                       ),
-                      Text(
-                        "Login ${viewModel.user.value.name.obs}",
-                        style: const TextStyle(
+                      const Text(
+                        "Login",
+                        style: TextStyle(
                           fontSize: 32,
                           fontFamily: "Lato",
                           fontWeight: FontWeight.w300,
@@ -106,7 +106,7 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
                               onPressed: () {
                                 final username = emailController.text;
                                 final password = passwordController.text;
-                                viewModel.login(username, password);
+                                userViewModel.login(username, password);
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
@@ -170,8 +170,8 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
               ],
             ),
           ),
-        ),
-      ),
+        );
+      })),
     );
   }
 }
